@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include "windows.h"
 
 using namespace std;
 
@@ -47,22 +48,22 @@ public:
 		string move;
 		if (x_move == 0)
 		{
-			move = "U";
+			move = "\x1B[34mU\033[0m";
 			return move;
 		}
 		else if (x_move == 1)
 		{
-			move = "L";
+			move = "\x1B[34mL\033[0m";
 			return move;
 		}
 		else if (x_move == 2)
 		{
-			move = "R";
+			move = "\x1B[34mR\033[0m";
 			return move;
 		}
 		else if (x_move == 3)
 		{
-			move = "D";
+			move = "\x1B[34mD\033[0m";
 			return move;
 		}
 		else if (x_move == 4)
@@ -130,6 +131,22 @@ public:
 			x_color = RED;
 	}
 
+	void Set_move()
+	{
+		int s_move = rand() % 5;
+		if (s_move == 0)
+			x_move = UP;
+		else if (s_move == 1)
+			x_move = LEFT;
+		else if (s_move == 2)
+			x_move = RIGHT;
+		else if (s_move == 3)
+			x_move = DOWN;
+		else if (s_move == 4)
+			x_move = STAND;
+
+	}
+
 private:
 	Move x_move;
 	Alive x_alive;
@@ -138,11 +155,13 @@ private:
 
 void Show_table(vector <Object> table)
 {
+	int l = 0;
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			cout << "Alive-" << table[i, j].Get_info_object_Alive() << "," << "Move-" << table[i, j].Get_info_object_Move() << ","<<"Color-"<< table[i, j].Get_info_object_Color()<<";";
+			cout << "Alive-" << table[l].Get_info_object_Alive() << "," << "Move-" << table[l].Get_info_object_Move() << ","<<"Color-"<< table[l].Get_info_object_Color()<<";";
+			l++;
 		}
 		cout << endl;
 	}
@@ -150,6 +169,7 @@ void Show_table(vector <Object> table)
 
 int main()
 {
+	srand(time(NULL));
 	vector <Object> table;
 	for (int i = 0; i < 25; i++)
 	{
@@ -158,8 +178,18 @@ int main()
 		table.push_back(object);
 	}
 	Show_table(table);
-
-	//printf("\x1B[34mTexting\033[0m\t\t");	blue
+	system("cls");
+	for (int k = 0; k < 10; k++)
+	{
+		system("cls");
+		for (int i = 0; i < 25; i++)
+		{
+			table[i].Set_color();
+			table[i].Set_move();
+		}
+		Show_table(table);
+		Sleep(2000);
+	}
 	//printf("\x1B[35mTexting\033[0m\n");	purple
 
 
